@@ -72,7 +72,7 @@ void draw()
 {
  println(frameCount);
  
- fill(230,1);
+ fill(230,2);
  noStroke();
  rect(0,0,width,height);
  
@@ -142,7 +142,7 @@ class Tube
  // display function called by each draw loop for each bus object - called above
  void display() {
   strokeWeight(0.1);
-  stroke(50,125);
+  stroke(40,150);
   line(vStart.x,vStart.y,vEnd.x,vEnd.y); // draw line for each route
  }
  
