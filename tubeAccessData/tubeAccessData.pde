@@ -59,6 +59,7 @@ void loadData(){
   tubeList.put(ID, t); // places tube object in hashmap
  }
  // Sort through tube objects and add to corresponding minute objects
+ // Interpolate for highlighted routes, so add for each minute between start and end
  for (Tube tubes: tubeList.values()){
   if (tubes.cardType == true){
    int start = int(tubes.inTime);
@@ -68,6 +69,7 @@ void loadData(){
    }
    println("Added data of type selected");
   } else {
+   // Nont interpolating for non-highlighted routes, so add only start time and draw once
    int time = int(tubes.inTime);
    minuteList[time].minuteTubes.add(tubes);
   }
@@ -121,7 +123,7 @@ void draw()
  }
 
  // halt the animation if the clock exceeds 200...because we don't have more data than that
- if (clock > maxFrames){
+ if (clock == maxFrames){
    noLoop();
  }
 }
@@ -146,13 +148,14 @@ class Tube
    duration = outTime-inTime;
  }
  
- // display function called by each draw loop for each bus object - called above
+ // for drawing non-highlighted routes
  void display() {
   strokeWeight(0.1);
   stroke(40,150);
   line(vStart.x,vStart.y,vEnd.x,vEnd.y); // draw line for each route
  }
  
+ // for drawing highlighted routes
  void highlight(){
   if (duration != 0){
    vCurrent.set(vEnd);
@@ -168,6 +171,7 @@ class Tube
  }
 }
 
+// Minute objects for storing arrays of tube data for each point in time.
 class Minute
 {
  ArrayList<Tube> minuteTubes;
