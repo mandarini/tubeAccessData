@@ -10,7 +10,6 @@ int days = 0;
 int hours = 0;
 int minutes = 0;
 
-
 void setup (){
  size (1000,1000);
  
@@ -35,13 +34,19 @@ void setup (){
 
 // Loads in the data
 void loadData(){
+ println("loading data...");
  String [] rows = loadStrings("tube.csv"); // load CSV file
  for (int i = 0; i<rows.length; i++)
  {
   // Split rows using the comma as delimiter - and save as string array
   String [] thisRow = split(rows[i], ",");
   int ID = int(thisRow[0]);
-  int cardType = int(thisRow[16]);
+  boolean cardType;
+  if (int(thisRow[16])==9){;
+   cardType = true;
+  } else {
+   cardType = false;
+  }
   float startx = map(float(thisRow[17]), 496048, 556167, 0, width); // map to width
   float starty = map(float(thisRow[18]), 161497, 201650, height, 0); // map to height, but keep proportions ??
   float endx = map(float(thisRow[19]), 496048, 556167, 0, width);
@@ -55,12 +60,13 @@ void loadData(){
  }
  // Sort through tube objects and add to corresponding minute objects
  for (Tube tubes: tubeList.values()){
-  if (tubes.cardType == 9){
+  if (tubes.cardType == true){
    int start = int(tubes.inTime);
    int end = int(tubes.outTime)+1;
    for (int i=start; i<end; i++){
     selectedList[i].minuteTubes.add(tubes);
    }
+   println("Added data of type selected");
   } else {
    int time = int(tubes.inTime);
    minuteList[time].minuteTubes.add(tubes);
@@ -123,12 +129,13 @@ void draw()
 // class for creating bus objects - called above
 class Tube 
 {
- int id, cardType; // id variable
+ int id;
+ boolean cardType; // id variable
  PVector vStart, vEnd, vCurrent; // float list array for x,y coordinates
  int inTime, outTime;
  float duration;
  
- Tube(int idin, int cardTypeIn, float xStartIn, float yStartIn, float xEndIn, float yEndIn, int inTimeIn, int outTimeIn){
+ Tube(int idin, boolean cardTypeIn, float xStartIn, float yStartIn, float xEndIn, float yEndIn, int inTimeIn, int outTimeIn){
    id = idin;
    cardType = cardTypeIn;
    vStart = new PVector(xStartIn,yStartIn);
