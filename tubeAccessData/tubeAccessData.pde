@@ -166,7 +166,7 @@ class Tube
    vCurrent.set(vStart);
   }
   strokeWeight(0.5);
-  stroke(255,0,0);
+  stroke(220,0,0);
   line(vStart.x,vStart.y,vCurrent.x,vCurrent.y); // draw line for each route
  }
 }
