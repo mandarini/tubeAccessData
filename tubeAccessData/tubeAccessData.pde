@@ -9,6 +9,7 @@ int maxFrames = 8*1440; //number of frames to display
 int days = 0;
 int hours = 0;
 int minutes = 0;
+String targetCard = "Freedom Pass (Disabled)";
 
 void setup (){
  size (1000,1000);
@@ -34,26 +35,30 @@ void setup (){
 
 // Loads in the data
 void loadData(){
- println("loading data...");
- String [] rows = loadStrings("tube.csv"); // load CSV file
- for (int i = 0; i<rows.length; i++)
+ println("loading csv file into memory...");
+ String [] rows = loadStrings("tubeComplete.csv"); // load CSV file
+ for (int i = 1; i<rows.length; i++) // start from 1 to skip headers
  {
   // Split rows using the comma as delimiter - and save as string array
   String [] thisRow = split(rows[i], ",");
   int ID = int(thisRow[0]);
   boolean cardType;
-  if (int(thisRow[16])==9){;
-   cardType = true;
+  if (targetCard.equals(thisRow[14].replace("\"",""))){; // for some ? reason this file requires manually removing ""
+   cardType = true; // assign "true" if matching card type of interest
+   println("row "+i);
+   println("Found matching card.");
   } else {
    cardType = false;
   }
-  float startx = map(float(thisRow[17]), 496048, 556167, 0, width); // map to width
-  float starty = map(float(thisRow[18]), 161497, 201650, height, 0); // map to height, but keep proportions ??
-  float endx = map(float(thisRow[19]), 496048, 556167, 0, width);
-  float endy = map(float(thisRow[20]), 161497, 201650, height, 0);   
+  float startx = map(float(thisRow[15]), 496048, 556167, 0, width); // map to width
+  float starty = map(float(thisRow[16]), 161497, 201650, height, 0); // map to height, but keep proportions ??
+  float endx = map(float(thisRow[17]), 496048, 556167, 0, width);
+  float endy = map(float(thisRow[18]), 161497, 201650, height, 0);
+  // Calculate minutes per day
   int day = (int(thisRow[1])-1)*1440;
-  int inTime = int(thisRow[6]) + day;
-  int outTime = int(thisRow[8]) + day;
+  // Add minutes for total days plus current day
+  int inTime = int(thisRow[5].replace("\"","")) + day; // for some ? reason this file requires manually removing ""
+  int outTime = int(thisRow[7].replace("\"","")) + day; // see above
   // Populate tube objects into tubeList hashmap
   Tube t = new Tube(ID,cardType,startx,starty,endx,endy,inTime,outTime); // creates new tube object
   tubeList.put(ID, t); // places tube object in hashmap
