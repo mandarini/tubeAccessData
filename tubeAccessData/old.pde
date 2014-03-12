@@ -11,56 +11,6 @@ int hours = 0;
 int minutes = 0;
 String targetCard = "Freedom Pass (Disabled)";
 
-//////stations///////
-
-
-HashMap<Integer, Tub> stations; // global hashmap for storing bus objects
-int len;
-
-void loadData1(){
- stations = new HashMap<Integer, Tub>();
- String [] rows = loadStrings("stationpositions.csv"); // load CSV file
- for (int i = 1; i<rows.length; i++) // Iterate through rows. Don't start from 0 so that you don't load in headers
- {
-  len=rows.length;
-  // Split rows using the comma as delimiter - and save as string array
-  String [] thisRow = split(rows[i], ";");
-  int zone = int(thisRow[3]);
-  float newx = map(float(thisRow[1]), 496048, 556167, 0, width); // map to width
-  float newy = map(float(thisRow[2]), 161497, 201650, height, 0); // map to height, but keep proportions
-  Tub s = new Tub(i, zone, len, newx, newy); // creates new bus object
-  stations.put(i, s); // places bus object in hashmap
- }
-}
-
-
-// class
-class Tub 
-{
- int id, route, len, zone1; // id variable
- float x,y; // float list array for x,y coordinates
- 
- Tub(int idin, int zonein, int lenin, float xin, float yin)
- {
-   len=lenin;
-   id = idin;
-   zone1 = zonein;
-   x=xin;
-   y=yin;
- }
- 
- // display function called by each draw loop for each bus object - called above
- void display1()
- {
-   ellipse(x, y, 3, 3);
- }
-}
-
-
-//////stations////
-
-//////////visuals/////
-
 void setup (){
  size (1000,1000);
  
@@ -81,13 +31,12 @@ void setup (){
  // call function to load in data to tubeList hashmap
  tubeList = new HashMap<Integer, Tube>(); // initialise the Hashmap 
  loadData();
- loadData1();
 }
 
 // Loads in the data
 void loadData(){
  println("loading csv file into memory...");
- String [] rows = loadStrings("atTEMPT.csv"); // load CSV file
+ String [] rows = loadStrings("tubeComplete.csv"); // load CSV file
  for (int i = 1; i<rows.length; i++) // start from 1 to skip headers
  {
   // Split rows using the comma as delimiter - and save as string array
@@ -134,12 +83,6 @@ void loadData(){
 
 void draw()
 {
-  
- for (Tub station: stations.values())
- {
-   station.display1(); // calls each bus object's display function. See below
- }
-
  println(frameCount);
  
  fill(230,2);
